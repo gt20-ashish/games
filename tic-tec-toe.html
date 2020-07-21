@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tic Tec Toe Game</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            width: 318px;
+        }
+        .square{
+            width: 100px;
+            height: 100px;
+            border-style: solid;
+            border-color: black;
+        }
+        
+        .square input {
+            width: inherit;
+            height: inherit;
+            font-size: 75px;
+        }
+        input:hover{
+            cursor: pointer;
+            background-color: yellow;
+        }
+        .player1{color: red;}
+        .player2{color: green;}
+        #player{color: blueviolet;font-size: 30px;}
+        #gameOutput{color: royalblue;font-size: 35px;}
+    </style>    
+</head>
+<body>
+    <center>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <h1>Tic Tec Toe Game</h1>
+        <h2><span id="player"> 1st </span> Player Chance </h2>
+    <div class="grid">
+        <div class="square"><input type="button" class="btn" id="1"></div>
+        <div class="square"><input type="button" class="btn" id="2"></div>
+        <div class="square"><input type="button" class="btn" id="3"></div>
+        <div class="square"><input type="button" class="btn" id="4"></div>
+        <div class="square"><input type="button" class="btn" id="5"></div>
+        <div class="square"><input type="button" class="btn" id="6"></div>
+        <div class="square"><input type="button" class="btn" id="7"></div>
+        <div class="square"><input type="button" class="btn" id="8"></div>
+        <div class="square"><input type="button" class="btn" id="9"></div>
+    </div>
+    <h2 id="gameOutput"></h2>
+    </center>
+<script>
+    var player1=Array();
+    var player2=Array();
+    var patterns = Array(
+        Array(1,2,3),
+        Array(4,5,6),
+        Array(7,8,9),
+        Array(1,4,7),
+        Array(1,5,9),     
+        Array(2,5,8),
+        Array(3,5,7),
+        Array(3,6,9)
+    );
+    
+    var startPlayer = 1;
+    var allsquares = document.querySelectorAll(".btn");
+    var player = document.getElementById("player");
+    var gameOutput = document.getElementById("gameOutput");
+    allsquares.forEach(element => {
+        element.addEventListener("click",draw);
+    });
+
+    function draw(){
+        if(check()){
+            if(this.value==""){
+                if(startPlayer == "1"){
+                    this.value="X";
+                    this.classList.add("player1");
+                    player1.push(parseInt(this.id));
+                    startPlayer = 2;
+                    playerText = "2nd";
+                }else{
+                    this.value="O";
+                    this.classList.add("player2");
+                    player2.push(parseInt(this.id));
+                    startPlayer = 1;
+                    playerText = "1st";
+                }
+                player.textContent = playerText;
+            }
+
+            if(player1.length+player2.length>=5)
+                winCondition();    
+        }
+        
+    }
+
+    function check(){
+        if(player1.length+player2.length==9){
+            return false   
+        }
+        return true
+    }
+
+    function winCondition(){
+        var count1,count2;
+        for(var i=0;i<patterns.length;i++){
+            count1 =0;count2=0;
+            
+            //first player
+            player1.forEach(playerelement =>{
+                //console.log(playerelement);
+                if(patterns[i].includes(playerelement)){
+                    count1++;
+                }
+            })
+            
+            if(count1==3){
+                gameOutput.textContent ="Player1 Won";
+                setTimeout(() => location.reload(),2000);
+                break;
+            }
+
+            //second player
+            player2.forEach(playerelement =>{
+                if(patterns[i].includes(playerelement))
+                    count2++;
+            })
+            if(count2==3){
+                gameOutput.textContent ="Player2 Won";    
+                setTimeout(() => location.reload(),2000);
+                break;
+            }
+        }
+
+        if(player1.length+player2.length==9 && count1!=3 && count2!=3){
+            gameOutput.textContent ="Game Draw";
+            setTimeout(() => location.reload(),1000)
+        }
+    }
+
+</script>
+</body>
+</html>
